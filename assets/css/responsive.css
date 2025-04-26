@@ -33,7 +33,7 @@
   }
 
   .menu-toggle {
-    display: block;
+    display: block !important;
     background: none;
     border: none;
     color: #f3e7d1;
