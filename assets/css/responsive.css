@@ -1,3 +1,62 @@
+.menu-toggle {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .navigation {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease;
+    background-color: rgba(18,16,14,0.98);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+  }
+
+  .navigation.active {
+    max-height: 500px;
+    padding: 1rem 0;
+  }
+
+  .navigation ul {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .navigation a {
+    display: block;
+    padding: 0.5rem 0;
+    font-size: 1.1rem;
+  }
+
+  .menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    color: #f3e7d1;
+    font-size: 2rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1001;
+  }
+
+  header {
+    position: relative;
+  }
+
+  .header-flex {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+}
+
+/* Dodatkowe style responsywne dla różnych rozmiarów ekranów */
+
 @media (min-width: 1200px) {
   .container {
     max-width: 1100px;

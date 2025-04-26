@@ -26,6 +26,16 @@
   <link rel="stylesheet" href="/assets/css/responsive.css">
   <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
 </head>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navigation = document.querySelector('.navigation');
+
+    menuToggle.addEventListener('click', function () {
+      navigation.classList.toggle('active');
+    });
+  });
+</script>
 <body>
   <header>
     <div class="container header-flex">
@@ -34,7 +44,8 @@
           <img src="/assets/images/sr-logo.png" alt="Szymon Rokicki" class="logo-img ornamented">
         </a>
       </h1>
-      <nav>
+      <button class="menu-toggle" aria-label="Menu">☰</button>
+      <nav class="navigation">
         <ul>
           <li><a href="index.html" class="active">Strona główna</a></li>
           <li><a href="/strona-w-budowie.html">O mnie</a></li>
