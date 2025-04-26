@@ -1,0 +1,79 @@
+@media (max-width: 768px) {
+    .header-flex {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    nav ul {
+      flex-direction: column;
+      gap: 0.8rem;
+      width: 100%;
+      padding: 1rem 0;
+    }
+  
+    nav a {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+  
+    .hero {
+      padding: 4rem 1rem;
+      min-height: 300px;
+    }
+  
+    .hero .medieval-heading-main {
+      font-size: 2rem;
+    }
+  
+    .hero .script-text {
+      font-size: 1.2rem;
+    }
+  
+    .intro {
+      padding: 2rem 1rem;
+    }
+  
+    .intro .medieval-heading-main {
+      font-size: 2rem;
+    }
+  
+    .intro .script-text {
+      font-size: 1.1rem;
+    }
+  
+    .container {
+      padding: 1rem;
+    }
+  
+    .logo-img {
+      height: 50px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .medieval-heading-main {
+      font-size: 1.8rem;
+    }
+  
+    .script-text {
+      font-size: 1rem;
+    }
+  
+    .btn {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+  
+    .hero .medieval-heading-main {
+      font-size: 1.8rem;
+    }
+  
+    .hero .script-text {
+      font-size: 1rem;
+    }
+  
+    .initial-letter::first-letter {
+      font-size: 2.5rem;
+    }
+  }

@@ -1,0 +1,416 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Underdog&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'MedievalSharp', cursive;
+  background-color: #12100e;
+  background-image: url('/assets/images/pergamin-texture.png');
+  background-attachment: fixed;
+  background-size: cover;
+  color: #f5f5dc;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+}
+
+main {
+  flex: 1;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+header {
+  background-color: rgba(18, 16, 14, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logo {
+  margin: 0;
+}
+
+.logo-img {
+  height: 60px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 2px #a38f65);
+  transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.05);
+}
+
+.ornamented {
+  border: 2px solid #c2b280;
+  padding: 0.5rem;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+nav a {
+  color: #f3e7d1;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+nav a:hover {
+  background-color: #e6d3a1;
+  color: #1a120a;
+  transform: translateY(-2px);
+}
+
+nav a.active {
+  background-color: #e6d3a1;
+  color: #1a120a;
+  font-weight: bold;
+}
+
+.hero {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 6rem 2rem;
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero .medieval-heading-main {
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.hero .script-text {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.intro {
+  padding: 4rem 2rem;
+  background-color: rgba(18, 16, 14, 0.9);
+  border-top: 1px solid #a38f65;
+  border-bottom: 1px solid #a38f65;
+}
+
+.intro .medieval-heading-main {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.intro .script-text {
+  font-size: 1.3rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.medieval-heading-main {
+  font-size: 2.4rem;
+  color: #e8d8b9;
+  font-family: 'MedievalSharp', cursive;
+  text-shadow: 0 0 3px #000;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #a38f65;
+  padding-bottom: 0.5rem;
+}
+
+.script-text {
+  font-family: 'Underdog', cursive;
+  font-size: 1.2rem;
+  color: #ede2c5;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.initial-letter::first-letter {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #d4af7f;
+  float: left;
+  line-height: 1;
+  margin-right: 0.3rem;
+  padding: 0.2rem;
+}
+
+.btn {
+  display: inline-block;
+  font-family: 'MedievalSharp', cursive;
+  background-image: linear-gradient(#d2b98b, #b39b6e);
+  color: #1e1e1e;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 5px #554433;
+  transition: box-shadow 0.3s, background-color 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+  background-color: #d4b98c;
+  box-shadow: 0 0 10px #ffd700;
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: inset 0 0 3px #554433;
+}
+
+.history-page {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background-color: rgba(18, 16, 14, 0.9);
+  border-top: 1px solid #a38f65;
+  border-bottom: 1px solid #a38f65;
+}
+  
+.history-page .container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+  
+.history-page .medieval-heading {
+  font-size: 2.6rem;
+  color: #e4dfd4;
+  text-align: center;
+  font-family: 'MedievalSharp', cursive;
+  text-shadow: -1px 1px 3px #000;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #a38f65;
+  padding-bottom: 0.5rem;
+}
+  
+.history-page .article-image {
+  margin: 0 auto;
+  max-width: 850px;
+  background-color: rgba(18, 16, 14, 0.85);
+  border: 3px solid #a38f65;
+  border-radius: 16px;
+  padding: 0.7rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.history-page .article-image:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 28px rgba(212, 175, 127, 0.5);
+}
+  
+.history-page .article-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+    filter: drop-shadow(1px 1px 6px rgba(0,0,0,0.4));
+}
+  
+.history-page .script-text {
+  font-family: 'Underdog', cursive;
+  font-size: 1.2rem;
+  color: #ede2c5;
+  text-align: center;
+  margin-top: 2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+  
+.history-page .btn {
+  display: inline-block;
+  font-family: 'MedievalSharp', cursive;
+  background-image: linear-gradient(#d2b98b, #b39b6e);
+  color: #1e1e1e;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 5px #554433;
+  transition: box-shadow 0.3s, background-color 0.3s, transform 0.2s;
+  margin-top: 2rem;
+}
+  
+.history-page .btn:hover {
+  background-color: #d4b98c;
+  box-shadow: 0 0 10px #ffd700;
+  transform: translateY(-2px);
+}
+  
+.history-page .btn:active {
+  transform: translateY(0);
+  box-shadow: inset 0 0 3px #554433;
+}
+  
+.summary {
+  padding: 4rem 1rem;
+  background-color: rgba(18, 16, 14, 0.92);
+  border-top: 1px solid #a38f65;
+  border-bottom: 1px solid #a38f65;
+  margin-top: 3rem;
+}
+
+.summary .medieval-heading-main {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.summary-item {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 2px solid #a38f65;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.summary-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(212, 175, 127, 0.5);
+}
+
+.summary-item h3 {
+  color: #e8d8b9;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.summary-item p {
+  font-family: 'Underdog', cursive;
+  color: #ede2c5;
+  font-size: 1rem;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  background-color: rgba(18, 16, 14, 0.95);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  margin-top: 3rem;
+  position: relative;
+  z-index: 1;
+  border-top: 2px solid #a38f65;
+}
+
+.scribe-footer {
+  font-family: 'Underdog', cursive;
+  font-size: 1rem;
+  color: #f0e6cf;
+  letter-spacing: 0.05em;
+  text-shadow: 1px 1px 2px #000;
+}
+
+footer a {
+  color: #f0e6cf;
+  text-decoration: none;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+footer a:hover {
+  color: #ffd700;
+  text-shadow: 0 0 5px #ffd700;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/texture-overlay.png');
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  animation: parchmentFlow 60s linear infinite;
+}
+
+@keyframes parchmentFlow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+.logo-img:focus {
+  outline: 2px solid #c2b280;
+  outline-offset: 2px;
+}
+
+nav a:focus {
+  outline: 2px solid #e6d3a1;
+  outline-offset: 2px;
+}
+
+.btn:focus {
+  outline: 2px solid #ffd700;
+  outline-offset: 2px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'MedievalSharp', cursive;
+  font-weight: normal;
+}
+
+p, a, li {
+  font-family: 'MedievalSharp', cursive;
+}
+
+.script-text, .scribe-footer {
+  font-family: 'Underdog', cursive;
+}
