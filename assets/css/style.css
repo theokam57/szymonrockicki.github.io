@@ -388,13 +388,13 @@ nav a.active {
   margin-top: 1rem;
 }
 
-a {
+.zamek {
   color: #f0e6cf;
   text-decoration: none;
   transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
 }
 
-a:hover {
+.zamek:hover {
   color: #ffd700;
   text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
