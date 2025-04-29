@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preload" href="/assets/css/style.css" as="style">
+  <link rel="preload" href="/assets/images/sr-logo.png" as="image">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Zobacz moje projekty — od rekonstrukcji historycznych po inicjatywy lokalne.">
+  <meta name="keywords" content="Szymon Rokicki, projekty historyczne, Lelów, rekonstrukcje, inicjatywy lokalne, średniowiecze, działalność regionalna">
+  <meta name="author" content="Szymon Rokicki">
+  <meta property="og:title" content="Projekty — Szymon Rokicki">
+  <meta property="og:description" content="Zobacz moje projekty — od rekonstrukcji historycznych po inicjatywy lokalne.">
+  <meta property="og:url" content="https://szymonrokicki.pl/projekty.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/assets/images/social-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Projekty — Szymon Rokicki">
+  <meta name="twitter:description" content="Zobacz moje projekty — od rekonstrukcji historycznych po inicjatywy lokalne.">
+  <meta name="twitter:image" content="/assets/images/social-preview.jpg">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#12100e">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Projekty | Szymon Rokicki</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+</head>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navigation = document.querySelector('.navigation');
+
+        menuToggle.addEventListener('click', function () {
+          navigation.classList.toggle('active');
+        });
+      });
+    </script>
+<body>
+  <header>
+    <div class="container header-flex">
+      <h1 class="logo">
+        <a href="index.html">
+          <img src="/assets/images/sr-logo.png" alt="Szymon Rokicki" class="logo-img ornamented">
+        </a>
+      </h1>
+      <button class="menu-toggle" aria-label="Menu">☰</button>
+      <nav class="navigation">
+        <ul>
+          <li><a href="index.html">Strona główna</a></li>
+          <li><a href="/o-mnie.html">O mnie</a></li>
+          <li><a href="/projekty.html" class="active">Projekty</a></li>
+          <li><a href="/historia-lelowa.html">Historia Lelowa</a></li>
+          <li><a href="/strona-w-budowie.html">Blog</a></li>
+          <li><a href="/kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="history-page">
+    <div class="container">
+      <h2 class="medieval-heading">Moje projekty</h2>
+      <p class="script-text initial-letter">Od pasji do historii po pracę społeczną i techniczną — oto wybrane projekty, które chciałbym zrealizować, realizuję lub ukończyłem:</p>
+      <div class="project-list">
+
+        <article class="history-box">
+          <h3 class="medieval-heading"><a href="/pages/mowimy-po-swojemu.html">Zalążek projektu "Mówimy po swojemu"</a></h3>
+          <p class="script-text">Projekt skupiający się na promocji posługiwania się lokalnymi gwarami i językami.</p>
+        </article>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="scribe-footer">&copy; 2025 Szymon Rokicki — Historia. Tożsamość. Działanie.</p>
+      <p class="scribe-footer"><a href="/strona-w-budowie.html">Regulamin</a></p>
+    </div>
+  </footer>
+</body>
+</html>

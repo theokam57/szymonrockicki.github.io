@@ -399,6 +399,39 @@ nav a.active {
   text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
+.contact-info {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  background: #1d1b1a;
+  border: 2px solid #5c4b36;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.contact-info p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #d6d1c4;
+  margin: 0.5rem 0;
+}
+
+.contact-info strong {
+  color: #e0c097;
+}
+
+.contact-info a {
+  color: #9bb8d3;
+  text-decoration: none;
+  border-bottom: 1px #9bb8d3;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.contact-info a:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
 .article-container {
   background-color: rgba(18, 16, 14, 0.85);
   padding: 2rem;
