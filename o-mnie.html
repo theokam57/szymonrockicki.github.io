@@ -26,27 +26,37 @@
   <link rel="stylesheet" href="/assets/css/responsive.css">
   <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
 </head>
-<body>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navigation = document.querySelector('.navigation');
 
-  <header>
-    <div class="container header-flex">
-      <h1 class="logo">
-        <a href="index.html">
-          <img src="/assets/images/sr-logo.png" alt="Szymon Rokicki" class="logo-img ornamented">
-        </a>
-      </h1>
-      <nav>
-        <ul>
-          <li><a href="/index.html">Strona główna</a></li>
-          <li><a href="/o-mnie.html" class="active">O mnie</a></li>
-          <li><a href="/projekty.html">Projekty</a></li>
-          <li><a href="/historia-lelowa.html">Historia Lelowa</a></li>
-          <li><a href="/strona-w-budowie.html">Blog</a></li>
-          <li><a href="/kontakt.html">Kontakt</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+    menuToggle.addEventListener('click', function () {
+      navigation.classList.toggle('active');
+    });
+  });
+</script>
+<body>
+<header>
+<div class="container header-flex">
+  <h1 class="logo">
+    <a href="index.html">
+      <img src="/assets/images/sr-logo.png" alt="Szymon Rokicki" class="logo-img ornamented">
+    </a>
+  </h1>
+  <button class="menu-toggle" aria-label="Menu">☰</button>
+  <nav class="navigation">
+    <ul>
+      <li><a href="index.html">Strona główna</a></li>
+      <li><a href="/o-mnie.html">O mnie</a></li>
+      <li><a href="/projekty.html">Projekty</a></li>
+      <li><a href="/historia-lelowa.html">Historia Lelowa</a></li>
+      <li><a href="/strona-w-budowie.html">Blog</a></li>
+      <li><a href="/kontakt.html" class="active">Kontakt</a></li>
+    </ul>
+  </nav>
+</div>
+</header>
 
   <main class="history-page">
     <div class="container">
