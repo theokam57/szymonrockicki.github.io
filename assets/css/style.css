@@ -235,6 +235,7 @@ nav a.active {
 }
 
 .summary-item {
+  display: block;
   background-color: rgba(255, 255, 255, 0.03);
   border: 2px solid #a38f65;
   border-radius: 10px;
@@ -242,6 +243,8 @@ nav a.active {
   text-align: center;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+  color: inherit;
 }
 
 .summary-item:hover {
