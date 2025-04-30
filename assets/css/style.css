@@ -264,6 +264,11 @@ nav a.active {
   font-size: 1rem;
 }
 
+.summary-item:hover h3,
+.summary-item:hover p {
+  color: #fff5cc;
+}
+
 .history-page {
   padding: 4rem 0;
   background-color: rgba(18, 16, 14, 0.3);
