@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ukryta strona - Snake 8-bit</title>
+    <title>Ukryta strona - Snake</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         body {
@@ -120,35 +120,28 @@
             function drawGame() {
                 if (isPaused) return;
 
-                // Czyszczenie planszy
                 ctx.fillStyle = '#000000';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Aktualizacja fazy migotania
                 flickerPhase += 0.1;
                 const flicker = Math.sin(flickerPhase) > 0 ? 1 : 0.7;
 
-                // Rysowanie węża
                 snake.forEach(segment => {
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
                 });
 
-                // Rysowanie jedzenia z efektem migotania
                 ctx.fillStyle = food.type === 'normal' ? `#ffffff` : `rgba(255, 255, 255, ${flicker})`;
                 ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
 
-                // Rysowanie bonusowego jedzenia
                 if (bonusFood) {
                     ctx.fillStyle = `rgba(255, 255, 255, ${flicker})`;
                     ctx.fillRect(bonusFood.x * gridSize, bonusFood.y * gridSize, gridSize - 2, gridSize - 2);
                 }
 
-                // Ruch węża
                 const head = { x: snake[0].x + dx, y: snake[0].y + dy };
                 snake.unshift(head);
 
-                // Sprawdzenie kolizji z jedzeniem
                 if (head.x === food.x && head.y === food.y) {
                     score += food.type === 'normal' ? 10 : 50;
                     document.getElementById('score').textContent = `WYNIK: ${score}`;
@@ -168,26 +161,22 @@
                     snake.pop();
                 }
 
-                // Sprawdzenie kolizji z bonusowym jedzeniem
                 if (bonusFood && head.x === bonusFood.x && head.y === bonusFood.y) {
                     score += 100;
                     document.getElementById('score').textContent = `WYNIK: ${score}`;
                     bonusFood = null;
                 }
 
-                // Aktualizacja timera bonusowego jedzenia
                 if (bonusFood) {
                     bonusFood.timer--;
                     if (bonusFood.timer <= 0) bonusFood = null;
                 }
 
-                // Sprawdzenie kolizji ze ścianami
                 if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
                     gameOver();
                     return;
                 }
 
-                // Sprawdzenie kolizji z samym sobą
                 for (let i = 1; i < snake.length; i++) {
                     if (head.x === snake[i].x && head.y === snake[i].y) {
                         gameOver();

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukryta strona - Tetris</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #000000;
+            font-family: 'Press Start 2P', cursive;
+            color: #ffffff;
+        }
+        #menu, #game-over {
+            background: #000000;
+            padding: 20px;
+            text-align: center;
+            display: none;
+        }
+        #menu h1, #game-over h1 {
+            margin: 0 0 20px;
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        #menu button, #game-over button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 0.8em;
+            cursor: pointer;
+            border: none;
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Press Start 2P', cursive;
+        }
+        canvas {
+            border: 2px solid #ffffff;
+            display: none;
+            background: #000000;
+        }
+        #message {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        #score, #high-score, #paused {
+            position: absolute;
+            top: 20px;
+            font-size: 0.8em;
+            color: #ffffff;
+        }
+        #score { left: 20px; }
+        #high-score { right: 20px; }
+        #paused {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            display: none;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <h1>Tetris</h1>
+        <button onclick="startTetrisGame()">START</button>
+    </div>
+    <p id="message">WPISZ "TETRIS"!</p>
+    <canvas id="tetrisGame" width="200" height="400"></canvas>
+    <div id="score">WYNIK: 0</div>
+    <div id="high-score">NAJLEPSZY: 0</div>
+    <div id="paused">PAUZA</div>
+    <div id="game-over">
+        <h1>KONIEC GRY!</h1>
+        <p id="final-score"></p>
+        <button onclick="restartGame()">GRAJ ZNOWU</button>
+        <button onclick="backToMenu()">MENU</button>
+    </div>
+
+    <script>
+        const konamiCode = ['t', 'e', 't', 'r', 'i', 's'];
+        let userInput = [];
+        let gameLoop, isPaused = false;
+        let flickerPhase = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('menu').style.display && !document.getElementById('tetrisGame').style.display) {
+                userInput.push(e.key.toLowerCase());
+                if (userInput.length > konamiCode.length) userInput.shift();
+                if (userInput.join('') === konamiCode.join('')) {
+                    document.getElementById('message').style.display = 'none';
+                    document.getElementById('menu').style.display = 'block';
+                }
+            }
+        });
+
+        function startTetrisGame() {
+            document.getElementById('menu').style.display = 'none';
+            const canvas = document.getElementById('tetrisGame');
+            canvas.style.display = 'block';
+            const ctx = canvas.getContext('2d');
+
+            const gridSize = 20;
+            const cols = canvas.width / gridSize;
+            const rows = canvas.height / gridSize;
+            let board = Array(rows).fill().map(() => Array(cols).fill(0));
+            let score = 0;
+            let highScore = localStorage.getItem('tetrisHighScore') || 0;
+            document.getElementById('high-score').textContent = `NAJLEPSZY: ${highScore}`;
+
+            const tetrominos = [
+                [[1,1,1,1]],
+                [[1,1],[1,1]],
+                [[0,1,0],[1,1,1]],
+                [[0,1,1],[1,1,0]],
+                [[1,1,0],[0,1,1]],
+                [[1,0,0],[1,1,1]],
+                [[0,0,1],[1,1,1]] 
+            ];
+
+            let currentTetromino = getRandomTetromino();
+            let tetrominoX = Math.floor(cols / 2) - Math.floor(currentTetromino[0].length / 2);
+            let tetrominoY = 0;
+            let tetrominoPosY = 0;
+            let lastTime = 0;
+            let fallSpeed = 0.006;
+            let lastKeyTime = 0;
+            const keyCooldown = 150;
+
+            function getRandomTetromino() {
+                const index = Math.floor(Math.random() * tetrominos.length);
+                return tetrominos[index];
+            }
+
+            function drawGame(timestamp) {
+                if (isPaused) return;
+
+                const deltaTime = timestamp - lastTime;
+                lastTime = timestamp;
+
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                flickerPhase += 0.1;
+                const flicker = Math.sin(flickerPhase) > 0 ? 1 : 0.7;
+
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < cols; x++) {
+                        if (board[y][x]) {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(x * gridSize, y * gridSize, gridSize - 1, gridSize - 1);
+                        }
+                    }
+                }
+
+                for (let y = 0; y < currentTetromino.length; y++) {
+                    for (let x = 0; x < currentTetromino[y].length; x++) {
+                        if (currentTetromino[y][x]) {
+                            ctx.fillStyle = `rgba(255, 255, 255, ${flicker})`;
+                            ctx.fillRect((tetrominoX + x) * gridSize, (tetrominoY + y + tetrominoPosY) * gridSize, gridSize - 1, gridSize - 1);
+                        }
+                    }
+                }
+
+                tetrominoPosY += fallSpeed * deltaTime;
+                if (tetrominoPosY >= 1) {
+                    tetrominoY += Math.floor(tetrominoPosY);
+                    tetrominoPosY -= Math.floor(tetrominoPosY);
+                    if (!canMove(currentTetromino, tetrominoX, tetrominoY + 1)) {
+                        for (let y = 0; y < currentTetromino.length; y++) {
+                            for (let x = 0; x < currentTetromino[y].length; x++) {
+                                if (currentTetromino[y][x]) {
+                                    if (tetrominoY + y < 0) {
+                                        gameOver();
+                                        return;
+                                    }
+                                    board[Math.floor(tetrominoY + y)][tetrominoX + x] = 1;
+                                }
+                            }
+                        }
+
+                        let linesCleared = 0;
+                        for (let y = rows - 1; y >= 0; y--) {
+                            if (board[y].every(cell => cell)) {
+                                board.splice(y, 1);
+                                board.unshift(Array(cols).fill(0));
+                                linesCleared++;
+                            }
+                        }
+                        if (linesCleared) {
+                            score += linesCleared * 10;
+                            document.getElementById('score').textContent = `WYNIK: ${score}`;
+                        }
+
+                        currentTetromino = getRandomTetromino();
+                        tetrominoX = Math.floor(cols / 2) - Math.floor(currentTetromino[0].length / 2);
+                        tetrominoY = 0;
+                        tetrominoPosY = 0;
+                        if (!canMove(currentTetromino, tetrominoX, tetrominoY)) {
+                            gameOver();
+                            return;
+                        }
+                    }
+                }
+
+                gameLoop = requestAnimationFrame(drawGame);
+            }
+
+            function canMove(tetromino, x, y) {
+                for (let ty = 0; ty < tetromino.length; ty++) {
+                    for (let tx = 0; tx < tetromino[ty].length; tx++) {
+                        if (tetromino[ty][tx]) {
+                            const newX = x + tx;
+                            const newY = Math.floor(y + ty);
+                            if (newX < 0 || newX >= cols || newY >= rows || (newY >= 0 && board[newY][newX])) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+
+            function rotateTetromino() {
+                const rotated = Array(currentTetromino[0].length).fill().map(() => Array(currentTetromino.length).fill(0));
+                for (let y = 0; y < currentTetromino.length; y++) {
+                    for (let x = 0; x < currentTetromino[y].length; x++) {
+                        rotated[x][currentTetromino.length - 1 - y] = currentTetromino[y][x];
+                    }
+                }
+                if (canMove(rotated, tetrominoX, tetrominoY)) {
+                    currentTetromino = rotated;
+                }
+            }
+
+            function gameOver() {
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('tetrisHighScore', highScore);
+                }
+                document.getElementById('final-score').textContent = `WYNIK: ${score} | NAJLEPSZY: ${highScore}`;
+                document.getElementById('game-over').style.display = 'block';
+                cancelAnimationFrame(gameLoop);
+            }
+
+            function togglePause() {
+                isPaused = !isPaused;
+                document.getElementById('paused').style.display = isPaused ? 'block' : 'none';
+                if (!isPaused) {
+                    lastTime = performance.now();
+                    drawGame(lastTime);
+                }
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (isPaused) return;
+                if (e.key === 'p' || e.key === 'P') {
+                    togglePause();
+                    return;
+                }
+                const now = performance.now();
+                if (now - lastKeyTime < keyCooldown) return;
+                lastKeyTime = now;
+
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        if (canMove(currentTetromino, tetrominoX - 1, tetrominoY)) tetrominoX--;
+                        break;
+                    case 'ArrowRight':
+                        if (canMove(currentTetromino, tetrominoX + 1, tetrominoY)) tetrominoX++;
+                        break;
+                    case 'ArrowDown':
+                        if (canMove(currentTetromino, tetrominoX, tetrominoY + 1)) tetrominoY++;
+                        break;
+                    case 'ArrowUp':
+                        rotateTetromino();
+                        break;
+                }
+            });
+
+            lastTime = performance.now();
+            drawGame(lastTime);
+        }
+
+        function restartGame() {
+            document.getElementById('game-over').style.display = 'none';
+            document.getElementById('tetrisGame').style.display = 'none';
+            document.getElementById('menu').style.display = 'block';
+        }
+
+        function backToMenu() {
+            document.getElementById('game-over').style.display = 'none';
+            document.getElementById('menu').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
