@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interaktywna mapa historyczna Lelowa z zaznaczonymi kluczowymi lokalizacjami oraz budynkami.">
+  <meta name="keywords" content="Lelów, mapa historyczna, zamek lelowski, rynek lelowski, Staromieście, średniowiecze, historia Lelowa">
+  <meta name="author" content="Szymon Rokicki">
+  <meta property="og:title" content="Mapa historyczna Lelowa — Szymon Rokicki">
+  <meta property="og:description" content="Interaktywna mapa Lelowa z zaznaczonymi historycznymi lokalizacjami oraz budynkami.">
+  <meta property="og:url" content="https://szymonrokicki.pl/pages/mapa-lelowa.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="/assets/images/social-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mapa historyczna Lelowa — Szymon Rokicki">
+  <meta name="twitter:description" content="Interaktywna mapa Lelowa z zaznaczonymi historycznymi lokalizacjami oraz budynkami.">
+  <meta name="twitter:image" content="/assets/images/social-preview.jpg">
+  <meta name="theme-color" content="#12100e">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <title>Mapa historyczna Lelowa | Szymon Rokicki</title>
+  <style>
+    /* Map-specific styles aligned with style.css and responsive.css */
+    #map {
+      height: 600px;
+      border: 2px solid #a38f65;
+      border-left: 8px solid #d4af7f;
+      border-radius: 12px;
+      background-color: rgba(18, 16, 14, 0.85);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    #map:hover {
+      transform: scale(1.01);
+      box-shadow: 0 0 28px rgba(212, 175, 127, 0.5);
+    }
+    .sidebar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 300px;
+      background-color: rgba(18, 16, 14, 0.95);
+      padding: 1.5rem;
+      border: 2px solid #a38f65;
+      border-left: 8px solid #d4af7f;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      max-height: 80vh;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+      font-family: 'Underdog', cursive;
+      color: #ede2c5;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+    .sidebar.hidden {
+      transform: translateX(320px);
+    }
+    .sidebar-toggle {
+      position: absolute;
+      top: 10px;
+      left: -40px;
+      background-image: linear-gradient(#d2b98b, #b39b6e);
+      color: #1e1e1e;
+      padding: 10px;
+      border-radius: 8px 0 0 8px;
+      cursor: pointer;
+      font-family: 'MedievalSharp', cursive;
+      font-weight: bold;
+      box-shadow: inset 0 0 5px #554433;
+      transition: box-shadow 0.3s, background-color 0.3s, transform 0.2s;
+    }
+    .sidebar-toggle:hover {
+      background-color: #d4b98c;
+      box-shadow: 0 0 10px #ffd700;
+      transform: translateY(-2px);
+    }
+    .sidebar h2 {
+      font-family: 'MedievalSharp', cursive;
+      font-size: 1.8rem;
+      color: #e8d8b9;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #a38f65;
+      padding-bottom: 0.5rem;
+      text-shadow: 0 0 3px #000;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar li {
+      padding: 0.5rem 0;
+      cursor: pointer;
+      border-bottom: 1px solid #a38f65;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 1.1rem;
+    }
+    .sidebar li:hover {
+      background-color: #e6d3a1;
+      color: #1a120a;
+    }
+    .timeline-container {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background-color: rgba(18, 16, 14, 0.85);
+      border: 2px solid #a38f65;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      font-family: 'Underdog', cursive;
+      color: #ede2c5;
+    }
+    .timeline-container label {
+      font-size: 1.2rem;
+      color: #e8d8b9;
+      margin-right: 0.5rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+    .timeline-container input[type="range"] {
+      width: 100%;
+      accent-color: #d4af7f;
+    }
+    .legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background-color: rgba(18, 16, 14, 0.95);
+      padding: 1rem;
+      border: 2px solid #a38f65;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      font-family: 'Underdog', cursive;
+      color: #ede2c5;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+    .legend div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    .legend img {
+      width: 24px;
+      height: 24px;
+      margin-right: 0.5rem;
+      filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.6));
+    }
+    /* Responsive adjustments */
+    @media (max-width: 767px) {
+      #map {
+        height: 400px;
+      }
+      .sidebar {
+        width: 100%;
+        right: 0;
+        top: auto;
+        bottom: 0;
+        max-height: 50vh;
+        transform: translateY(100%);
+      }
+      .sidebar.active {
+        transform: translateY(0);
+      }
+      .sidebar-toggle {
+        left: 10px;
+        top: -40px;
+        border-radius: 8px 8px 0 0;
+      }
+      .history-page .container {
+        max-width: 90%;
+        padding: 1rem;
+      }
+      .history-page .medieval-heading {
+        font-size: 2rem;
+      }
+      .timeline-container {
+        padding: 1rem;
+      }
+      .timeline-container label {
+        font-size: 1rem;
+      }
+      .legend {
+        font-size: 0.9rem;
+      }
+      .legend img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    @media (min-width: 768px) and (max-width: 1199px) {
+      #map {
+        height: 500px;
+      }
+      .sidebar {
+        width: 250px;
+      }
+      .history-page .container {
+        padding: 2rem;
+      }
+      .history-page .medieval-heading {
+        font-size: 2.4rem;
+      }
+    }
+    @media (min-width: 1200px) {
+      #map {
+        height: 600px;
+      }
+      .history-page .container {
+        max-width: 1100px;
+      }
+      .history-page .medieval-heading {
+        font-size: 2.8rem;
+      }
+    }
+    @media (max-width: 479px) {
+      #map {
+        height: 350px;
+      }
+      .sidebar {
+        max-height: 40vh;
+      }
+      .history-page .medieval-heading {
+        font-size: 1.8rem;
+      }
+      .timeline-container label {
+        font-size: 0.9rem;
+      }
+      .legend {
+        font-size: 0.8rem;
+      }
+      .legend img {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="history-page">
+    <div class="container">
+      <h1 class="medieval-heading">Interaktywna mapa historyczna Lelowa</h1>
+      <div class="article-container">
+        <p class="article-paragraph initial-letter">
+          Poniższa interaktywna mapa przedstawia kluczowe historyczne lokalizacje i budynki w Lelowie. Użyj panelu bocznego, aby przeglądać szczegóły, oraz suwaka czasowego, aby zobaczyć zmiany w czasie.
+        </p>
+      </div>
+      <div class="timeline-container">
+        <label for="timeline">Okres historyczny: <span id="year-display">Wszystkie</span></label>
+        <input type="range" id="timeline" min="1200" max="1900" step="50" value="1900">
+      </div>
+      <div class="article-image">
+        <div id="map"></div>
+        <div class="image-caption">Interaktywna mapa Lelowa z zaznaczonymi historycznymi lokalizacjami.</div>
+      </div>
+    </div>
+    <div class="sidebar hidden" id="sidebar">
+      <div class="sidebar-toggle" id="toggle-sidebar">☰</div>
+      <h2>Lokalizacje</h2>
+      <ul id="location-list"></ul>
+    </div>
+    <div class="legend">
+      <div><img src="/assets/images/castle-icon.png" alt="Zamek"> Zamek</div>
+      <div><img src="/assets/images/market-icon.png" alt="Rynek"> Rynek</div>
+      <div><img src="/assets/images/monastery-icon.png" alt="Klasztor"> Klasztor</div>
+      <div><img src="/assets/images/cemetery-icon.png" alt="Cmentarz"> Cmentarz</div>
+      <div><img src="/assets/images/gate-icon.png" alt="Brama"> Brama/Furta</div>
+      <div><img src="/assets/images/tower-icon.png" alt="Baszta"> Baszta</div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script>
+    // Initialize map
+    const map = L.map('map', {
+      center: [50.682, 19.625],
+      zoom: 15,
+      maxZoom: 18,
+      minZoom: 12,
+      zoomControl: true
+    });
+
+    // Add base layers
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '© Esri'
+    });
+
+    osm.addTo(map);
+
+    // Layer control
+    const baseMaps = {
+      "OpenStreetMap": osm,
+      "Esri Satellite": esri
+    };
+    L.control.layers(baseMaps).addTo(map);
+
+    // Custom icons
+    const castleIcon = L.icon({
+      iconUrl: '/assets/images/castle-icon.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+
+    const marketIcon = L.icon({
+      iconUrl: '/assets/images/market-icon.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+
+    const monasteryIcon = L.icon({
+      iconUrl: '/assets/images/monastery-icon.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+
+    const cemeteryIcon = L.icon({
+      iconUrl: '/assets/images/cemetery-icon.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+
+    const gateIcon = L.icon({
+      iconUrl: '/assets/images/gate-icon.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+
+    const towerIcon = L.icon({
+      iconUrl: '/assets/images/tower-icon.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+
+    // Marker data with periods
+    const markersData = [
+      {
+        coords: [50.6854, 19.6246],
+        title: 'Zamek Lelowski',
+        description: 'Dawniej zamek drewniany wzniesiony około 1246 roku, przebudowany na murowany w XIV w za rządów Kazimierza Wielkiego. Ruiny zamku zostały rozebrane w latach 1804-1805. Około 1825 roku miejsce przemianowane na cmentarz.',
+        period: { start: 1246, end: 1825 },
+        icon: castleIcon,
+        category: 'Zamek'
+      },
+      {
+        coords: [50.6832, 19.6248],
+        title: 'Rynek w Lelowie',
+        description: 'Centralny plac miasta po lokacji ok. 1341 r., o unikalnym układzie urbanistycznym, z każdego rogu rynku wychodzą po dwie ulice.',
+        period: { start: 1341, end: 1900 },
+        icon: marketIcon,
+        category: 'Rynek'
+      },
+      {
+        coords: [50.6843, 19.6248],
+        title: 'Dawny Klasztor Franciszkanów',
+        description: 'W tym miejscu przed dwustu laty stał klasztor franciszkański. Decyzja o kasacji klasztoru zapadła 17 kwietnia 1819 roku zaś jego rozbiórka trwała do 1868 roku.',
+        period: { start: 1500, end: 1868 },
+        icon: monasteryIcon,
+        category: 'Klasztor'
+      },
+      {
+        coords: [50.6712, 19.6113],
+        title: 'Staromieście',
+        description: 'Obszar pierwszej lokacji miejskiej przeprowadzonej przed 1314 r. (prawdopodobnie przez Bolesława V Wstydliwego w latach 1275-1279).',
+        period: { start: 1275, end: 1900 },
+        icon: marketIcon,
+        category: 'Rynek'
+      },
+      {
+        coords: [50.6831, 19.6247],
+        title: 'Ratusz',
+        description: 'Przybliżone miejsce gdzie mógł znajdować się ratusz miasta Lelowa. Ratusz był drewnianą budowlą i posiadał wagę miejską, poświadczony po raz pierwszy w 1415. Jako murowany został poświadczony dopiero w 1789 jednak jako opustoszały i nieużytkowany.',
+        period: { start: 1415, end: 1789 },
+        icon: marketIcon,
+        category: 'Rynek'
+      },
+      {
+        coords: [50.6834, 19.6271],
+        title: 'Brama Krakowska (Porta Cracoviensis)',
+        description: 'To właśnie tutaj znajdowała się główna brama miasta - Brama Krakowska, zapewne zapytasz "Skąd ta nazwa?" a nazwa ma swoje korzenie w średniowieczu - ta brama prowadziła szlakiem handlowym przez Żarnowiec, Miechów do Krakowa.',
+        period: { start: 1300, end: 1800 },
+        icon: gateIcon,
+        category: 'Brama'
+      },
+      {
+        coords: [50.6842, 19.6240],
+        title: 'Brama Grodzka (Porta Castrensis, Porta Arcensis)',
+        description: 'Brama ta (prawdopodobnie) posiadała drewniany most prowadzący aż do zamku stąd też wywodzi się nazwa owej bramy.',
+        period: { start: 1300, end: 1800 },
+        icon: gateIcon,
+        category: 'Brama'
+      },
+      {
+        coords: [50.6826, 19.6237],
+        title: 'Stary cmentarz żydowski',
+        description: 'Miejsce, które przez dziesiątki lat służyło jako miejsce pochówku dla społeczności żydowskiej okolicy. Cmentarz istniał co najmniej od XVII wieku kiedy to w 1644 roku Władysław IV wydał przywilej uprawniający do pochówku właśnie w tym miejscu.',
+        period: { start: 1644, end: 1900 },
+        icon: cemeteryIcon,
+        category: 'Cmentarz'
+      },
+      {
+        coords: [50.6852, 19.6371],
+        title: 'Nowy cmentarz żydowski',
+        description: 'O tym cmentarzu niewiele wiadomo, jednak z dostępnych informacji możemy się dowiedzieć, że cmentarz powstał w połowie XIX wieku i był użytkowany aż do czasu niemieckiej napaści na Polskę.',
+        period: { start: 1850, end: 1900 },
+        icon: cemeteryIcon,
+        category: 'Cmentarz'
+      },
+      {
+        coords: [50.6831, 19.6224],
+        title: 'Furta Kacza (Portula Kacza)',
+        description: 'Znajdująca się w zachodniej części murów miejskich prowadziła na podmokłe tereny wzdłuż rzeki Białki - to właśnie tutaj przesiadywały kaczki, od których wywodzi się nazwa furty.',
+        period: { start: 1300, end: 1800 },
+        icon: gateIcon,
+        category: 'Brama'
+      },
+      {
+        coords: [50.6815, 19.6250],
+        title: 'Furta Sukiennicka (Portula Pannificum)',
+        description: 'Brama ta położona była w południowej części murów miejskich. Swoją nazwę zawdzięcza blisko położonym, mieszkającym w południowo-wschodniej części miasta sukiennikom lelowskim, którym została powierzona w opiekę.',
+        period: { start: 1300, end: 1800 },
+        icon: gateIcon,
+        category: 'Brama'
+      },
+      {
+        coords: [50.6820, 19.6264],
+        title: 'Baszta Złoczyńców (Turris Maleficorum)',
+        description: 'Owiana złą sławą baszta ta miała służyć jako miejsce tortur, wzmiankowana jedynie w jednym źródle naukowym, które jednak dużo informacji nie dostarcza.',
+        period: { start: 1400, end: 1800 },
+        icon: towerIcon,
+        category: 'Baszta'
+      }
+    ];
+
+    // Marker cluster group
+    const markers = L.markerClusterGroup({
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true
+    });
+
+    // Sidebar and timeline
+    const sidebar = document.getElementById('sidebar');
+    const toggleSidebar = document.getElementById('toggle-sidebar');
+    const locationList = document.getElementById('location-list');
+    const timeline = document.getElementById('timeline');
+    const yearDisplay = document.getElementById('year-display');
+
+    // Add markers to map and sidebar
+    markersData.forEach(data => {
+      const marker = L.marker(data.coords, { icon: data.icon })
+        .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #e8d8b9;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #ede2c5;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
+
+      marker.on('click', () => {
+        map.flyTo(marker.getLatLng(), 17, { duration: 1.2 });
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('active');
+      });
+
+      markers.addLayer(marker);
+
+      const li = document.createElement('li');
+      li.textContent = data.title;
+      li.style.fontFamily = "'Underdog', cursive";
+      li.addEventListener('click', () => {
+        map.flyTo(data.coords, 17, { duration: 1.2 });
+        marker.openPopup();
+      });
+      locationList.appendChild(li);
+    });
+
+    map.addLayer(markers);
+
+    // Toggle sidebar
+    toggleSidebar.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('active');
+    });
+
+    // Timeline filter
+    timeline.addEventListener('input', (e) => {
+      const year = parseInt(e.target.value);
+      yearDisplay.textContent = year === 1900 ? 'Wszystkie' : year;
+
+      markers.clearLayers();
+      locationList.innerHTML = '';
+
+      markersData.forEach(data => {
+        if (year === 1900 || (data.period.start <= year && data.period.end >= year)) {
+          const marker = L.marker(data.coords, { icon: data.icon })
+            .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #e8d8b9;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #ede2c5;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
+
+          marker.on('click', () => {
+            map.flyTo(marker.getLatLng(), 17, { duration: 1.2 });
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('active');
+          });
+
+          markers.addLayer(marker);
+
+          const li = document.createElement('li');
+          li.textContent = data.title;
+          li.style.fontFamily = "'Underdog', cursive";
+          li.addEventListener('click', () => {
+            map.flyTo(data.coords, 17, { duration: 1.2 });
+            marker.openPopup();
+          });
+          locationList.appendChild(li);
+        }
+      });
+
+      map.addLayer(markers);
+    });
+
+    // Responsive map height
+    function adjustMapHeight() {
+      const mapDiv = document.getElementById('map');
+      if (window.innerWidth <= 479) {
+        mapDiv.style.height = '350px';
+      } else if (window.innerWidth <= 767) {
+        mapDiv.style.height = '400px';
+      } else if (window.innerWidth <= 1199) {
+        mapDiv.style.height = '500px';
+      } else {
+        mapDiv.style.height = '600px';
+      }
+    }
+
+    window.addEventListener('resize', adjustMapHeight);
+    adjustMapHeight();
+  </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preload" href="/assets/css/style.css" as="style">
+  <link rel="preload" href="/assets/images/sr-logo.png" as="image">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interaktywna mapa historyczna Lelowa z zaznaczonymi kluczowymi lokalizacjami oraz budynkami.">
+  <meta name="keywords" content="Lelów, mapa historyczna, zamek lelowski, rynek lelowski, Staromieście, średniowiecze, historia Lelowa">
+  <meta name="author" content="Szymon Rokicki">
+  <meta property="og:title" content="Mapa historyczna Lelowa — Szymon Rokicki">
+  <meta property="og:description" content="Interaktywna mapa Lelowa z zaznaczonymi historycznymi lokalizacjami oraz budynkami.">
+  <meta property="og:url" content="https://szymonrokicki.pl/pages/mapa-lelowa.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="/assets/images/social-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mapa historyczna Lelowa — Szymon Rokicki">
+  <meta name="twitter:description" content="Interaktywna mapa Lelowa z zaznaczonymi historycznymi lokalizacjami oraz budynkami.">
+  <meta name="twitter:image" content="/assets/images/social-preview.jpg">
+  <meta name="theme-color" content="#12100e">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+  <title>Mapa historyczna Lelowa | Szymon Rokicki</title>
+</head>
+<body>
+  <main class="history-page">
+    <div class="container">
+      <h1 class="medieval-heading">Interaktywna mapa historyczna Lelowa</h1>
+      <div class="article-container">
+        <p class="article-paragraph">
+          Poniższa interaktywna mapa przedstawia większość historycznych lokalizacji budynków/miejsc w Lelowie których położenie udało mi się ustalić.
+        </p>
+      </div>
+      <div class="article-image">
+        <div id="map" style="height: 500px;"></div>
+        <div class="image-caption">Interaktywna mapa Lelowa z zaznaczonymi historycznymi lokalizacjami.</div>
+      </div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([50.682, 19.625], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var markers = [
+{
+        coords: [50.6854, 19.6246],
+        title: 'Zamek Lelowski',
+        description: 'Dawniej zamek drewniany wzniesiony około 1246 roku, przebudowany na murowany w XIV w za rządów Kazimierza Wielkiego. Ruiny zamku zostały rozebrane w latach 1804-1805. Około 1825 roku miejsce przemianowane na cmentarz.'
+      },
+      {
+        coords: [50.6832, 19.6248],
+        title: 'Rynek w Lelowie',
+        description: 'Centralny plac miasta po lokacji ok. 1341 r., o unikalnym układzie urbanistycznym, z każdego rogu rynku wychodzą po dwie ulice.'
+      },
+      {
+        coords: [50.6843, 19.6248],
+        title: 'Dawny Klasztor Franciszkanów',
+        description: 'W tym miejscu przed dwustu laty stał klasztor franciszkański. Decyzja o kasacji klasztoru zapadła 17 kwietnia 1819 roku zaś jego rozbiórka trwała do 1868 roku.'
+      },
+      {
+        coords: [50.6712, 19.6113],
+        title: 'Staromieście',
+        description: 'Obszar pierwszej lokacji miejskiej przeprowadzonej przed 1314 r. (prawdopodonie przez Bolesława V Wstydliwego w latach 1275-1279).'
+      },
+      {
+        coords: [50.6831, 19.6247],
+        title: 'Ratusz',
+        description: 'Przybliżone miejsce gdzie mógł znajdować sie ratusz miasta Lelowa. Ratusz był drewnianą budowlę i posiadał wagę miejską, poświadczony po raz pierwszy w 1415. Jako murowany został poświadczony dopiero w 1789 jednak jako opustoszały i nieużytkowany.'
+      },
+      {
+        coords: [50.6834, 19.6271],
+        title: 'Brama Krakowska (Porta Cracoviensis)',
+        description: 'To właśnie tutaj znajdowała się główna brama miasta - Brama Krakowska, zapewne zapytasz "Skąd ta nazwa?" a nazwa ma swoje korzenie w średniowieczu - ta brama prowadziła szlakiem handlowym przez Żarnowiec, Miechów do Krakowa.'
+      },
+      {
+        coords: [50.6842, 19.6240],
+        title: 'Brama Grodzka (Porta Castrensis, Porta Arcensis)',
+        description: 'Brama ta (prawdopodobnie) posiadała drewniany most prowadzący aż do zamku stąd też wywodzi się nazwa owej bramy.'
+      },
+      {
+        coords: [50.6826, 19.6237],
+        title: 'Stary cmentarz żydowski',
+        description: 'Miejsce które przez dziesiątki lat służyło jako miejsce pochówku dla społeczności żydowskiej okolicy. Cmentarz istniał co najmniej od XVII wieku kiedy to w 1644 roku Władysław IV wydał przywilej uprawniający do pochówku własnie w tym miejscu.'
+      },
+      {
+        coords: [50.6852, 19.6371],
+        title: 'Nowy cmentarz żydowski',
+        description: 'O tym cmentarzu niewiele wiadomo, jednak z dostępnych informacji możemy się dowiedzieć że cmentarz powstał w połowie XIX wieku i był użytkowany aż do czasu niemieckiej napaści na Polske.'
+      },
+      {
+        coords: [50.6831, 19.6224],
+        title: 'Furta Kacza (Portula Kacza)',
+        description: 'Znajdująca się w zachodniej części murów miejskich prowadziła na podmokłe tereny wzdłuż rzeki białki - to właśnie tutaj przesiadywały kaczki od których wywodzi sie nazwa furty.'
+      },
+      {
+        coords: [50.6815, 19.6250],
+        title: 'Furta Sukiennicka (Portula Pannificum)',
+        description: 'Brama ta położona była w południowej części murów miejskich. Swoją nazwe zawdzięcza dzięki blisko położonym, mieszkających w południowo-wschodniej części miasta sukiennikom lelowskim którym została powierzona w opiekę. Początkowo zaczynała trakt do Pilicy i Wolbromia który przerodził sie w trakt ku Krakowowi.'
+      },
+      {
+        coords: [50.6820, 19.6264],
+        title: 'Baszta Złoczyńców (Turris Maleficorum)',
+        description: 'Owiana złą sławą baszta ta miała służyć jako miejsce torutur, wzmiankowana jedynie w jednym źródle naukowym, które jednak dużo informacji nie dostarcza. Nie jest znana dokładne miejsce baszty - równie dobrze mogła znajdować się na zamku, jednak jak przyjżymy się na mapę miasta z 1823 roku możemy dostrzec wystający element w południowo-wschodniej części murów miasta którym może być szukana brama.'
+      }
+    ];
+
+    markers.forEach(function(data) {
+      var leafletMarker = L.marker(data.coords)
+        .addTo(map)
+        .bindPopup(`<b>${data.title}</b><br>${data.description}`);
+
+      leafletMarker.on('click', function() {
+        map.flyTo(leafletMarker.getLatLng(), 17, { duration: 1.2 });
+      });
+    });
+  </script>
+</body>
+</html>
