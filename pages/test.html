@@ -124,33 +124,7 @@
       width: 100%;
       accent-color: #d4af7f;
     }
-    .legend {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background-color: rgba(18, 16, 14, 0.95);
-      padding: 1rem;
-      border: 2px solid #a38f65;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-      z-index: 1000;
-      font-family: 'Underdog', cursive;
-      color: #ede2c5;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-    }
-    .legend div {
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-    }
-    .legend img {
-      width: 24px;
-      height: 24px;
-      margin-right: 0.5rem;
-      filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.6));
-    }
-    /* Responsive adjustments */
+
     @media (max-width: 767px) {
       #map {
         height: 400px;
@@ -183,13 +157,6 @@
       }
       .timeline-container label {
         font-size: 1rem;
-      }
-      .legend {
-        font-size: 0.9rem;
-      }
-      .legend img {
-        width: 20px;
-        height: 20px;
       }
     }
     @media (min-width: 768px) and (max-width: 1199px) {
@@ -230,13 +197,6 @@
       .timeline-container label {
         font-size: 0.9rem;
       }
-      .legend {
-        font-size: 0.8rem;
-      }
-      .legend img {
-        width: 18px;
-        height: 18px;
-      }
     }
   </style>
 </head>
@@ -263,19 +223,10 @@
       <h2>Lokalizacje</h2>
       <ul id="location-list"></ul>
     </div>
-    <div class="legend">
-      <div><img src="/assets/images/castle-icon.png" alt="Zamek"> Zamek</div>
-      <div><img src="/assets/images/market-icon.png" alt="Rynek"> Rynek</div>
-      <div><img src="/assets/images/monastery-icon.png" alt="Klasztor"> Klasztor</div>
-      <div><img src="/assets/images/cemetery-icon.png" alt="Cmentarz"> Cmentarz</div>
-      <div><img src="/assets/images/gate-icon.png" alt="Brama"> Brama/Furta</div>
-      <div><img src="/assets/images/tower-icon.png" alt="Baszta"> Baszta</div>
-    </div>
   </main>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script>
-    // Initialize map
     const map = L.map('map', {
       center: [50.682, 19.625],
       zoom: 15,
@@ -284,7 +235,6 @@
       zoomControl: true
     });
 
-    // Add base layers
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -295,14 +245,12 @@
 
     osm.addTo(map);
 
-    // Layer control
     const baseMaps = {
       "OpenStreetMap": osm,
       "Esri Satellite": esri
     };
     L.control.layers(baseMaps).addTo(map);
 
-    // Custom icons
     const castleIcon = L.icon({
       iconUrl: '/assets/images/castle-icon.png',
       iconSize: [32, 32],
@@ -345,19 +293,18 @@
       popupAnchor: [0, -32]
     });
 
-    // Marker data with periods
     const markersData = [
       {
         coords: [50.6854, 19.6246],
         title: 'Zamek Lelowski',
         description: 'Dawniej zamek drewniany wzniesiony około 1246 roku, przebudowany na murowany w XIV w za rządów Kazimierza Wielkiego. Ruiny zamku zostały rozebrane w latach 1804-1805. Około 1825 roku miejsce przemianowane na cmentarz.',
-        period: { start: 1246, end: 1825 },
+        period: { start: 1246, end: 1805 },
         icon: castleIcon,
         category: 'Zamek'
       },
       {
         coords: [50.6832, 19.6248],
-        title: 'Rynek w Lelowie',
+        title: 'Rynek',
         description: 'Centralny plac miasta po lokacji ok. 1341 r., o unikalnym układzie urbanistycznym, z każdego rogu rynku wychodzą po dwie ulice.',
         period: { start: 1341, end: 1900 },
         icon: marketIcon,
@@ -380,10 +327,18 @@
         category: 'Rynek'
       },
       {
+        coords: [50.6706, 19.6114],
+        title: 'Kościół Wniebowzięcia NMP',
+        description: 'Murowamy kościół miał zostać wzniesiony jak podaje śp. ks. Zygmunt Zaborski w 1080 roku, świadczyć o tym miał napis odkyryty podczas remontu kościoła na jednej ze ścian.',
+        period: { start: 1080, end: 1900 },
+        icon: marketIcon,
+        category: 'Rynek'
+      },
+      {
         coords: [50.6831, 19.6247],
         title: 'Ratusz',
         description: 'Przybliżone miejsce gdzie mógł znajdować się ratusz miasta Lelowa. Ratusz był drewnianą budowlą i posiadał wagę miejską, poświadczony po raz pierwszy w 1415. Jako murowany został poświadczony dopiero w 1789 jednak jako opustoszały i nieużytkowany.',
-        period: { start: 1415, end: 1789 },
+        period: { start: 1350, end: 1789 },
         icon: marketIcon,
         category: 'Rynek'
       },
@@ -391,7 +346,7 @@
         coords: [50.6834, 19.6271],
         title: 'Brama Krakowska (Porta Cracoviensis)',
         description: 'To właśnie tutaj znajdowała się główna brama miasta - Brama Krakowska, zapewne zapytasz "Skąd ta nazwa?" a nazwa ma swoje korzenie w średniowieczu - ta brama prowadziła szlakiem handlowym przez Żarnowiec, Miechów do Krakowa.',
-        period: { start: 1300, end: 1800 },
+        period: { start: 1350, end: 1800 },
         icon: gateIcon,
         category: 'Brama'
       },
@@ -399,7 +354,7 @@
         coords: [50.6842, 19.6240],
         title: 'Brama Grodzka (Porta Castrensis, Porta Arcensis)',
         description: 'Brama ta (prawdopodobnie) posiadała drewniany most prowadzący aż do zamku stąd też wywodzi się nazwa owej bramy.',
-        period: { start: 1300, end: 1800 },
+        period: { start: 1350, end: 1800 },
         icon: gateIcon,
         category: 'Brama'
       },
@@ -423,7 +378,7 @@
         coords: [50.6831, 19.6224],
         title: 'Furta Kacza (Portula Kacza)',
         description: 'Znajdująca się w zachodniej części murów miejskich prowadziła na podmokłe tereny wzdłuż rzeki Białki - to właśnie tutaj przesiadywały kaczki, od których wywodzi się nazwa furty.',
-        period: { start: 1300, end: 1800 },
+        period: { start: 1350, end: 1800 },
         icon: gateIcon,
         category: 'Brama'
       },
@@ -431,7 +386,7 @@
         coords: [50.6815, 19.6250],
         title: 'Furta Sukiennicka (Portula Pannificum)',
         description: 'Brama ta położona była w południowej części murów miejskich. Swoją nazwę zawdzięcza blisko położonym, mieszkającym w południowo-wschodniej części miasta sukiennikom lelowskim, którym została powierzona w opiekę.',
-        period: { start: 1300, end: 1800 },
+        period: { start: 1350, end: 1800 },
         icon: gateIcon,
         category: 'Brama'
       },
@@ -439,27 +394,24 @@
         coords: [50.6820, 19.6264],
         title: 'Baszta Złoczyńców (Turris Maleficorum)',
         description: 'Owiana złą sławą baszta ta miała służyć jako miejsce tortur, wzmiankowana jedynie w jednym źródle naukowym, które jednak dużo informacji nie dostarcza.',
-        period: { start: 1400, end: 1800 },
+        period: { start: 1350, end: 1800 },
         icon: towerIcon,
         category: 'Baszta'
       }
     ];
 
-    // Marker cluster group
     const markers = L.markerClusterGroup({
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true
     });
 
-    // Sidebar and timeline
     const sidebar = document.getElementById('sidebar');
     const toggleSidebar = document.getElementById('toggle-sidebar');
     const locationList = document.getElementById('location-list');
     const timeline = document.getElementById('timeline');
     const yearDisplay = document.getElementById('year-display');
 
-    // Add markers to map and sidebar
     markersData.forEach(data => {
       const marker = L.marker(data.coords, { icon: data.icon })
         .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #e8d8b9;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #ede2c5;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
@@ -484,13 +436,11 @@
 
     map.addLayer(markers);
 
-    // Toggle sidebar
     toggleSidebar.addEventListener('click', () => {
       sidebar.classList.toggle('hidden');
       sidebar.classList.toggle('active');
     });
 
-    // Timeline filter
     timeline.addEventListener('input', (e) => {
       const year = parseInt(e.target.value);
       yearDisplay.textContent = year === 1900 ? 'Wszystkie' : year;
@@ -525,7 +475,6 @@
       map.addLayer(markers);
     });
 
-    // Responsive map height
     function adjustMapHeight() {
       const mapDiv = document.getElementById('map');
       if (window.innerWidth <= 479) {
