@@ -25,7 +25,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <title>Mapa historyczna Lelowa | Szymon Rokicki</title>
   <style>
-    /* Map-specific styles aligned with style.css and responsive.css */
     #map {
       height: 600px;
       border: 2px solid #a38f65;
@@ -211,7 +210,7 @@
       </div>
       <div class="timeline-container">
         <label for="timeline">Okres historyczny: <span id="year-display">Wszystkie</span></label>
-        <input type="range" id="timeline" min="1200" max="1900" step="50" value="1900">
+        <input type="range" id="timeline" min="1000" max="2050" step="25" value="2050">
       </div>
       <div class="article-image">
         <div id="map"></div>
@@ -314,7 +313,7 @@
         coords: [50.6843, 19.6248],
         title: 'Dawny Klasztor Franciszkanów',
         description: 'W tym miejscu przed dwustu laty stał klasztor franciszkański. Decyzja o kasacji klasztoru zapadła 17 kwietnia 1819 roku zaś jego rozbiórka trwała do 1868 roku.',
-        period: { start: 1500, end: 1868 },
+        period: { start: 1357, end: 1868 },
         icon: monasteryIcon,
         category: 'Klasztor'
       },
@@ -362,7 +361,7 @@
         coords: [50.6826, 19.6237],
         title: 'Stary cmentarz żydowski',
         description: 'Miejsce, które przez dziesiątki lat służyło jako miejsce pochówku dla społeczności żydowskiej okolicy. Cmentarz istniał co najmniej od XVII wieku kiedy to w 1644 roku Władysław IV wydał przywilej uprawniający do pochówku właśnie w tym miejscu.',
-        period: { start: 1644, end: 1900 },
+        period: { start: 1644, end: 1940 },
         icon: cemeteryIcon,
         category: 'Cmentarz'
       },
@@ -397,6 +396,22 @@
         period: { start: 1350, end: 1800 },
         icon: towerIcon,
         category: 'Baszta'
+      },
+      {
+        coords: [50.6860, 19.6167],
+        title: 'Zbiornik wodny',
+        description: 'Przed wybudowaniem zbiornika oraz spływu regulującego poziom zbiornika istniały tu mokradła zwane Borkami dające życie lewemu dopływowi Białki Lelowskiej - Wąwoźnej. Przy tej rzecce istniał również młyn który funkcjonował aż do lat budowy zbiornika czyli lat 80 XX. wieku.',
+        period: { start: 1980, end: 2025 },
+        icon: towerIcon,
+        category: 'Rzeka'
+      },
+      {
+        coords: [50.6851, 19.6224],
+        title: 'Młynówka',
+        description: '',
+        period: { start: 1980, end: 2025 },
+        icon: towerIcon,
+        category: 'Rzeka'
       }
     ];
 
@@ -414,7 +429,7 @@
 
     markersData.forEach(data => {
       const marker = L.marker(data.coords, { icon: data.icon })
-        .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #e8d8b9;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #ede2c5;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
+        .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #504b3e;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #504b3e;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
 
       marker.on('click', () => {
         map.flyTo(marker.getLatLng(), 17, { duration: 1.2 });
@@ -443,15 +458,15 @@
 
     timeline.addEventListener('input', (e) => {
       const year = parseInt(e.target.value);
-      yearDisplay.textContent = year === 1900 ? 'Wszystkie' : year;
+      yearDisplay.textContent = year === 2050 ? 'Wszystkie' : year;
 
       markers.clearLayers();
       locationList.innerHTML = '';
 
       markersData.forEach(data => {
-        if (year === 1900 || (data.period.start <= year && data.period.end >= year)) {
+        if (year === 2050 || (data.period.start <= year && data.period.end >= year)) {
           const marker = L.marker(data.coords, { icon: data.icon })
-            .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #e8d8b9;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #ede2c5;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
+            .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #67614e;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #504b3e;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
 
           marker.on('click', () => {
             map.flyTo(marker.getLatLng(), 17, { duration: 1.2 });
