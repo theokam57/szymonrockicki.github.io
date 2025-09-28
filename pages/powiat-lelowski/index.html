@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preload" href="/assets/css/style.css" as="style">
+  <link rel="preload" href="/assets/images/sr-logo.png" as="image">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content=".">
+  <meta name="keywords" content="">
+  <meta name="author" content="Szymon Rokicki">
+  <meta property="og:title" content=" — Szymon Rokicki">
+  <meta property="og:description" content="">
+  <meta property="og:url" content="https://szymonrokicki.pl/pages/zamek-lelowski/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="/assets/images/social-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content=".">
+  <meta name="twitter:image" content="/assets/images/social-preview.jpg">
+  <meta name="theme-color" content="#12100e">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+  <title>Powiat lelowski | Szymon Rokicki</title>
+</head>
+<body>
+  <main class="content-page article-page">
+    <div class="container article-container">
+      <h1 class="medieval-heading article-title">Powiat lelowski</h1>
+      <p class="article-meta">
+        Opublikowano: <time datetime="2025-09-21">21 IX 2025</time> •
+        Aktualizacja: <time datetime="2025-09-21">21 IX 2025</time> •
+        Autor: Szymon Rokicki
+      </p>
+    </div>
+  </main>
+  <script>
+    (function () {
+      const WPM = Number(document.documentElement.dataset.wpm) || 220;
+
+      const main = document.querySelector('main.content-page');
+      if (!main) return;
+
+      const clone = main.cloneNode(true);
+      const exclude = [
+        '.article-meta', '.notice-box', '.reference-list', 'figure',
+        'figcaption', 'nav', 'aside', 'script', 'style', '.image-legend'
+      ];
+      exclude.forEach(sel => clone.querySelectorAll(sel).forEach(el => el.remove()));
+
+      const text = (clone.innerText || '').trim();
+      const words = (text.match(/\S+/g) || []).length;
+
+      const images = main.querySelectorAll('figure img').length;
+      const minutes = Math.max(1, Math.ceil(words / WPM + Math.min(images, 10) * 0.2));
+
+      let meta = document.querySelector('.article-meta');
+      if (!meta) {
+        meta = document.createElement('p');
+        meta.className = 'article-meta';
+        main.prepend(meta);
+      }
+      const rt = document.createElement('span');
+      rt.className = 'reading-time';
+      rt.textContent = ` • Czas czytania: ${minutes} min`;
+      meta.appendChild(rt);
+
+      const ld = document.querySelector('script[type="application/ld+json"]');
+      if (ld) {
+        try {
+          const data = JSON.parse(ld.textContent);
+          data.wordCount = words;
+          data.timeRequired = `PT${minutes}M`;
+          ld.textContent = JSON.stringify(data);
+        } catch (_) {}
+      }
+
+      const m = document.createElement('meta');
+      m.setAttribute('name', 'wordCount');
+      m.setAttribute('content', String(words));
+      document.head.appendChild(m);
+    })();
+  </script>
+</body>
+</html>

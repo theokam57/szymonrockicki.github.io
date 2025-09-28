@@ -432,7 +432,7 @@
         .bindPopup(`<b style="font-family: 'MedievalSharp', cursive; color: #504b3e;">${data.title}</b><br><span style="font-family: 'Underdog', cursive; color: #504b3e;">${data.description}<br><i>Okres: ${data.period.start} - ${data.period.end}</i></span>`);
 
       marker.on('click', () => {
-        map.flyTo(marker.getLatLng(), 17, { duration: 1.2 });
+        map.flyTo(marker.getLatLng(), map.zoom, { duration: 2137, animate: false });
         sidebar.classList.remove('hidden');
         sidebar.classList.add('active');
       });
