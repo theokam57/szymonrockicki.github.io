@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lokacja miasta — gra edukacyjna</title>
+
+  <!-- Podłącz główne arkusze stylów (umieść style.css i responsive.css obok tego pliku) -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+
+  <!-- Dodatkowe, niewielkie style specyficzne dla modułu gry -->
+  <style>
+    /* Kontener gry dopasowany do stylistyki strony */
+    .game-container {
+      background-color: rgba(18,16,14,0.9);
+      border: 2px solid #a38f65;
+      border-left: 8px solid #d4af7f;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      box-shadow: 0 0 12px rgba(0,0,0,0.5);
+      max-width: 1000px;
+    }
+
+    /* Scena (obraz + opis) */
+    .scene {
+      position: relative;
+      height: 480px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      background: #0f0e0d;
+    }
+
+    #scene-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.78);
+      transform-origin: center center;
+      transition: opacity 0.45s ease, transform 0.6s ease;
+      opacity: 0;
+      display: block;
+    }
+
+    .scene-loaded #scene-image { opacity: 1; transform: scale(1); }
+
+    .scene-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.65));
+      color: #ede2c5;
+      padding: 1rem;
+      font-family: 'Underdog', cursive;
+      font-size: 1.1rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+      line-height: 1.4;
+    }
+
+    /* Panel opcji */
+    #options {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      margin-top: 0.6rem;
+    }
+
+    .option-btn {
+      background-image: linear-gradient(#d2b98b, #b39b6e);
+      color: #1e1e1e;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-family: 'MedievalSharp', cursive;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: inset 0 0 5px #554433;
+      transition: transform .18s ease, box-shadow .18s ease;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      min-width: 220px;
+      max-width: calc(50% - 0.6rem);
+    }
+
+    .option-btn .thumb {
+      width: 72px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid rgba(0,0,0,0.15);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+      flex-shrink: 0;
+      background: #000;
+    }
+
+    .option-btn .label {
+      font-family: 'Underdog', cursive;
+      font-size: 0.95rem;
+      color: #1e1e1e;
+    }
+
+    .option-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      background-color: #d4b98c;
+    }
+
+    /* Restart / koniec */
+    .option-restart {
+      background: transparent;
+      border: 2px solid #d4af7f;
+      color: #e8d8b9;
+      font-family: 'Underdog', cursive;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      min-width: 200px;
+    }
+
+    /* Responsywność gry (dodatkowa) */
+    @media (max-width: 700px) {
+      .scene { height: 340px; }
+      .option-btn { min-width: 48%; max-width: 48%; }
+      .option-btn .thumb { width: 56px; height: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-flex">
+      <div class="logo ornamented" aria-hidden="false">
+        <img class="logo-img" src="/assets/images/logo.png" alt="Logo strony" />
+      </div>
+      <nav class="navigation" aria-label="Główne menu">
+        <ul>
+          <li><a href="#" class="active">Strona główna</a></li>
+          <li><a href="#history">Historia</a></li>
+          <li><a href="#game">Gra</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="game" class="container game-container" aria-labelledby="game-title">
+      <h2 id="game-title" class="medieval-heading">Lokacja miasta</h2>
+      <p class="script-text" style="margin-bottom:1rem">
+        Wybierz teren lokacji spośród proponowanych opcji. Po kliknięciu wybierasz scenę (obraz + opis). Każda decyzja prowadzi do kolejnej sceny lub zakończenia.
+      </p>
+
+      <div id="scene" class="scene" role="region" aria-live="polite" aria-label="Scena gry">
+        <img id="scene-image" src="" alt="Scena" />
+        <div id="scene-text" class="scene-text"></div>
+      </div>
+
+      <div id="options" role="navigation" aria-label="Opcje wyboru">
+        <!-- przyciski generowane dynamicznie -->
+      </div>
+
+      <div style="margin-top:1rem;color:#cfc6a8;font-family:'Underdog',cursive;font-size:0.95rem">
+        Status: <span id="step">0</span> kroków.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container scribe-footer">Wersja demonstracyjna modułu gry — obrazy zastąp własnymi plikami.</div>
+  </footer>
+
+  <!-- Wbudowane dane gry (JSON) — podmień ścieżki obrazów na własne -->
+  <script id="game-data" type="application/json">
+  {
+    "start":{
+      "text":"Książę powierza Ci zadanie założenia nowego miasta. Wybierz teren lokacji.",
+      "image":"https://upload.wikimedia.org/wikipedia/commons/4/4f/Polish_landscape_example.jpg",
+      "options":[
+        {"id":"rzeka","text":"Lokuj nad rzeką","thumb":"https://upload.wikimedia.org/wikipedia/commons/7/7d/River_example.jpg"},
+        {"id":"wzgorze","text":"Lokuj na wzgórzu","thumb":"https://upload.wikimedia.org/wikipedia/commons/5/5a/Hilltop_village_example.jpg"},
+        {"id":"trakt","text":"Lokuj przy trakcie handlowym","thumb":"https://upload.wikimedia.org/wikipedia/commons/9/9a/Medieval_road_example.jpg"}
+      ]
+    },
+
+    "rzeka":{
+      "text":"Rzeka zapewnia dostęp do wody i szlak handlowy; grozi powodziami. Jak chcesz zabezpieczyć teren?",
+      "image":"https://upload.wikimedia.org/wikipedia/commons/0/0d/Medieval_river_example.jpg",
+      "options":[
+        {"id":"groble","text":"Zbuduj groblę","thumb":"https://upload.wikimedia.org/wikipedia/commons/3/3b/Embankment_example.jpg"},
+        {"id":"przegryw","text":"Ryzykuj i lokuj mimo powodzi","thumb":"https://upload.wikimedia.org/wikipedia/commons/4/4b/Flood_example.jpg"}
+      ]
+    },
+
+    "wzgorze":{
+      "text":"Wzgórze daje obronność i widok, ale utrudnia dostęp do wody. Co robisz?",
+      "image":"https://upload.wikimedia.org/wikipedia/commons/5/5a/Hilltop_village_example.jpg",
+      "options":[
+        {"id":"studnia","text":"Wykop studnię","thumb":"https://upload.wikimedia.org/wikipedia/commons/6/6c/Well_example.jpg"},
+        {"id":"droga","text":"Zbuduj drogę do sąsiedniej wsi","thumb":"https://upload.wikimedia.org/wikipedia/commons/8/80/Path_example.jpg"}
+      ]
+    },
+
+    "trakt":{
+      "text":"Trakt handlowy gwarantuje handel i rozwój, ale przyciąga bandytów. Jak zabezpieczysz szlak?",
+      "image":"https://upload.wikimedia.org/wikipedia/commons/9/9a/Medieval_road_example.jpg",
+      "options":[
+        {"id":"straze","text":"Ustanów straże przy trakcie","thumb":"https://upload.wikimedia.org/wikipedia/commons/0/02/Guard_example.jpg"},
+        {"id":"targ","text":"Zorganizuj targ i ściągnij kupców","thumb":"https://upload.wikimedia.org/wikipedia/commons/2/2d/Market_example.jpg"}
+      ]
+    },
+
+    "groble":{"text":"Groble zmniejszają ryzyko powodzi, ale kosztem funduszy. Miasto rozwija się powoli. KONIEC","image":"https://upload.wikimedia.org/wikipedia/commons/3/3b/Embankment_example.jpg","options":[]},
+    "przegryw":{"text":"Powódź zniszczyła część osad. Miasto odbudowuje się przez dekady. KONIEC","image":"https://upload.wikimedia.org/wikipedia/commons/4/4b/Flood_example.jpg","options":[]},
+    "studnia":{"text":"Studnia zapewnia wodę; osada szybko rośnie. KONIEC","image":"https://upload.wikimedia.org/wikipedia/commons/6/6c/Well_example.jpg","options":[]},
+    "droga":{"text":"Droga łączy osadę z rynkiem sąsiednim; rozwój umiarkowany. KONIEC","image":"https://upload.wikimedia.org/wikipedia/commons/8/80/Path_example.jpg","options":[]},
+    "straze":{"text":"Straże ograniczają bandytów; handel kwitnie. KONIEC","image":"https://upload.wikimedia.org/wikipedia/commons/0/02/Guard_example.jpg","options":[]},
+    "targ":{"text":"Targ przyciąga kupców; miasto zmienia się w ośrodek handlowy. KONIEC","image":"https://upload.wikimedia.org/wikipedia/commons/2/2d/Market_example.jpg","options":[]}
+  }
+  </script>
+
+  <!-- Silnik gry (prosty, klientowy) -->
+  <script>
+    (function(){
+      const dataEl = document.getElementById('game-data');
+      const gameData = JSON.parse(dataEl.textContent);
+      const sceneImage = document.getElementById('scene-image');
+      const sceneText = document.getElementById('scene-text');
+      const optionsDiv = document.getElementById('options');
+      const stepEl = document.getElementById('step');
+      const sceneWrap = document.getElementById('scene');
+
+      let current = 'start';
+      let step = 0;
+
+      // Pomocnik: ustaw scenę po id
+      function setScene(id){
+        const node = gameData[id];
+        if(!node) return;
+        current = id;
+        step++;
+        stepEl.textContent = step;
+
+        // animacja: ukryj obraz, zmień zawartość, pokaż
+        sceneWrap.classList.remove('scene-loaded');
+        sceneImage.style.transform = 'scale(1.03)';
+        sceneImage.style.opacity = 0;
+
+        // krótkie opóźnienie dla płynnej wymiany
+        setTimeout(()=>{
+          sceneImage.src = node.image || '';
+          sceneImage.alt = node.text || 'Scena';
+          sceneText.textContent = node.text || '';
+
+          // wygeneruj przyciski
+          optionsDiv.innerHTML = '';
+          if(node.options && node.options.length){
+            node.options.forEach(opt=>{
+              const btn = document.createElement('button');
+              btn.className = 'option-btn';
+              btn.type = 'button';
+              btn.setAttribute('aria-label', opt.text);
+
+              // miniatura + etykieta
+              const thumb = document.createElement('img');
+              thumb.className = 'thumb';
+              thumb.alt = opt.text + ' — miniatura';
+              thumb.src = opt.thumb || '';
+              thumb.loading = 'lazy';
+
+              const label = document.createElement('div');
+              label.className = 'label';
+              label.textContent = opt.text;
+
+              btn.appendChild(thumb);
+              btn.appendChild(label);
+
+              btn.addEventListener('click', ()=>{
+                const next = opt.next || opt.id;
+                if(next && gameData[next]) setScene(next);
+              });
+
+              optionsDiv.appendChild(btn);
+            });
+          } else {
+            // koniec: przycisk restartu
+            const r = document.createElement('button');
+            r.className = 'option-restart';
+            r.type = 'button';
+            r.textContent = 'Rozpocznij ponownie';
+            r.addEventListener('click', ()=>{ step = 0; setScene('start'); });
+            optionsDiv.appendChild(r);
+          }
+
+          // po ustawieniu obrazka: gdy załadowany, pokaż z efektem
+          if(sceneImage.complete){
+            sceneWrap.classList.add('scene-loaded');
+            sceneImage.style.transform = 'scale(1)';
+            sceneImage.style.opacity = 1;
+          } else {
+            sceneImage.onload = function(){
+              sceneWrap.classList.add('scene-loaded');
+              sceneImage.style.transform = 'scale(1)';
+              sceneImage.style.opacity = 1;
+            };
+            sceneImage.onerror = function(){
+              // jeśli obraz się nie załaduje, pozostaw tekst widoczny
+              sceneImage.style.opacity = 0;
+            };
+          }
+        }, 220);
+      }
+
+      // Accessibility: jeśli obraz się nie załaduje, tekst będzie jedyną reprezentacją sceny
+      sceneImage.addEventListener('error', ()=>{ sceneImage.style.opacity = 0; });
+
+      // Start
+      setScene(current);
+    })();
+  </script>
+</body>
+</html>
